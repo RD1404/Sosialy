@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOSIALY - Télécharger l'application</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -49,14 +45,9 @@
             line-height: 1.6;
         }
 
-        .instruction b {
-            font-weight: 700;
-            color: #333;
-        }
+        .instruction b { font-weight: 700; color: #333; }
 
-        .download-section {
-            margin: 40px 0;
-        }
+        .download-section { margin: 40px 0; }
 
         .download-btn {
             display: inline-flex;
@@ -70,51 +61,50 @@
             font-size: 1.5rem;
             font-weight: bold;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        box-shadow 0.3s ease;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.35s ease;
             cursor: pointer;
             border: none;
             outline: none;
             position: relative;
+            z-index: 1;
         }
 
-        /* HALO LUMINEUX AU SURVOL */
-        .download-btn::before {
+        /* HALO LUMINEUX */
+        .download-btn::after {
             content: '';
             position: absolute;
-            top: -4px;
-            left: -4px;
-            right: -4px;
-            bottom: -4px;
-            border-radius: 54px;
+            inset: -6px;
+            border-radius: 56px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             opacity: 0;
             z-index: -1;
-            filter: blur(14px);
-            transition: opacity 0.4s ease;
+            filter: blur(16px);
+            transition: opacity 0.4s ease, filter 0.15s ease;
+            pointer-events: none;
         }
 
         .download-btn:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 18px 45px rgba(102, 126, 234, 0.5);
         }
 
-        .download-btn:hover::before {
-            opacity: 0.45;
+        .download-btn:hover::after {
+            opacity: 0.5;
         }
 
-        /* EFFET DE RÉTRÉCISSEMENT + PRESSION AU CLIC */
+        /* EFFET DE PRESSION + RÉTRÉCISSEMENT VISIBLE */
         .download-btn:active {
-            transform: scale(0.88);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3),
-                        0 0 20px rgba(118, 75, 162, 0.25);
-            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        box-shadow 0.1s ease;
+            transform: scale(0.82);
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.25),
+                        0 0 30px rgba(118, 75, 162, 0.35);
+            transition: transform 0.08s ease-in,
+                        box-shadow 0.08s ease-in;
         }
 
-        .download-btn:active::before {
-            opacity: 0.7;
-            filter: blur(20px);
+        .download-btn:active::after {
+            opacity: 0.8;
+            filter: blur(24px);
         }
 
         .arrows {
@@ -154,10 +144,7 @@
             max-width: 90%;
         }
 
-        .download-counter span:first-child {
-            font-size: 0.95rem;
-            color: #666;
-        }
+        .download-counter span:first-child { font-size: 0.95rem; color: #666; }
 
         #download-count {
             font-size: 1.5rem;
@@ -191,6 +178,7 @@
         </p>
 
         <div class="download-section">
+            <!-- ✅ ID AJOUTÉ ICI POUR LE COMPTEUR -->
             <a href="https://github.com/RD1404/Sosialy/releases/download/V1.0.0/Sosialy.apk" 
                class="download-btn" 
                id="downloadBtn"
@@ -203,10 +191,10 @@
 
         <img src="icon-512.png" alt="SOSIALY Application" class="app-image">
 
-        <!-- COMPTEUR COUNTAPI -->
+        <!-- ✅ COMPTEUR (Affiche 0 par défaut au lieu de ...) -->
         <div class="download-counter">
             <span>📥 Téléchargements :</span>
-            <span id="download-count">...</span>
+            <span id="download-count">0</span>
         </div>
 
         <div class="footer">
@@ -219,7 +207,7 @@
             const btn = document.getElementById('downloadBtn');
             const counterEl = document.getElementById('download-count');
             
-            // Animation d'entrée du bouton
+            // Animation d'entrée
             btn.style.opacity = '0';
             btn.style.transform = 'translateY(20px)';
             setTimeout(() => {
@@ -228,26 +216,27 @@
                 btn.style.transform = 'translateY(0)';
             }, 300);
 
-            // 🔧 CONFIGURATION COUNTAPI
-            const namespace = 'sosialy-rd1404-2026'; // Unique pour éviter les conflits
-            const key = 'downloads';
+            // CONFIGURATION COUNTAPI
+            const namespace = 'sosialy-rd1404-2026';
+            const key = 'downloads-v2'; // Nouveau nom pour repartir à 0
 
-            // 1️ Charger le compteur actuel au démarrage
+            // 1️⃣ Charger la valeur actuelle
             fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
                 .then(res => res.json())
                 .then(data => {
-                    counterEl.textContent = data.value || 0;
+                    counterEl.textContent = data.value;
                 })
                 .catch(() => {
-                    counterEl.textContent = '0';
+                    // Si erreur, on laisse 0
+                    console.log("Erreur compteur, affichage par défaut 0");
                 });
 
-            // 2️⃣ Incrémenter le compteur à chaque clic
+            // 2️⃣ Ajouter +1 à chaque clic
             btn.addEventListener('click', function() {
                 fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
                     .then(res => res.json())
                     .then(data => {
-                        counterEl.textContent = data.value || 0;
+                        counterEl.textContent = data.value;
                     })
                     .catch(() => {});
             });
