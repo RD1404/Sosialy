@@ -29,13 +29,50 @@
 
         h1 {
             font-family: 'Arial', 'Souvenir', 'Helvetica', sans-serif;
-            font-size: 3.5rem;
+            font-size: 4.8rem;
             color: #4B0082;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(75, 0, 130, 0.15);
+            letter-spacing: 6px;
+            display: inline-block;
+            padding: 12px 35px;
+            border: 3px solid #764ba2;
+            border-radius: 16px;
+            animation: neonPulse 2s ease-in-out infinite;
+            text-shadow: 0 0 8px rgba(102, 126, 234, 0.6),
+                         0 0 20px rgba(118, 75, 162, 0.4),
+                         0 0 40px rgba(118, 75, 162, 0.2);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5),
+                        0 0 30px rgba(118, 75, 162, 0.3),
+                        0 0 60px rgba(118, 75, 162, 0.15),
+                        inset 0 0 12px rgba(102, 126, 234, 0.2),
+                        inset 0 0 30px rgba(118, 75, 162, 0.1);
+        }
+
+        @keyframes neonPulse {
+            0%, 100% {
+                border-color: #667eea;
+                box-shadow: 0 0 10px rgba(102, 126, 234, 0.5),
+                            0 0 30px rgba(118, 75, 162, 0.3),
+                            0 0 60px rgba(118, 75, 162, 0.15),
+                            inset 0 0 12px rgba(102, 126, 234, 0.2),
+                            inset 0 0 30px rgba(118, 75, 162, 0.1);
+                text-shadow: 0 0 8px rgba(102, 126, 234, 0.6),
+                             0 0 20px rgba(118, 75, 162, 0.4),
+                             0 0 40px rgba(118, 75, 162, 0.2);
+            }
+            50% {
+                border-color: #a855f7;
+                box-shadow: 0 0 15px rgba(102, 126, 234, 0.7),
+                            0 0 45px rgba(118, 75, 162, 0.5),
+                            0 0 90px rgba(118, 75, 162, 0.25),
+                            inset 0 0 18px rgba(102, 126, 234, 0.3),
+                            inset 0 0 45px rgba(118, 75, 162, 0.15);
+                text-shadow: 0 0 12px rgba(102, 126, 234, 0.8),
+                             0 0 30px rgba(118, 75, 162, 0.6),
+                             0 0 60px rgba(118, 75, 162, 0.35);
+            }
         }
 
         .instruction {
@@ -132,27 +169,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .download-counter {
-            display: block;
-            margin: 35px auto 0 auto;
-            padding: 15px 25px;
-            background: rgba(102, 126, 234, 0.08);
-            border-radius: 12px;
-            border: 1px solid rgba(102, 126, 234, 0.2);
-            text-align: center;
-            width: fit-content;
-            max-width: 90%;
-        }
-
-        .download-counter span:first-child { font-size: 0.95rem; color: #666; }
-
-        #download-count {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #4B0082;
-            margin-left: 8px;
-        }
-
         .footer {
             margin-top: 30px;
             padding-top: 25px;
@@ -162,10 +178,9 @@
         }
 
         @media (max-width: 600px) {
-            h1 { font-size: 2.0rem; }
+            h1 { font-size: 2.8rem; letter-spacing: 3px; padding: 8px 20px; }
             .download-btn { font-size: 1.2rem; padding: 15px 30px; }
             .container { padding: 30px 20px; }
-            #download-count { font-size: 1.0rem; }
         }
     </style>
 </head>
@@ -191,12 +206,6 @@
 
         <img src="icon-512.png" alt="SOSIALY Application" class="app-image">
 
-        <!-- ✅ COMPTEUR (Affiche 0 par défaut au lieu de ...) -->
-        <div class="download-counter">
-            <span>📥 Téléchargements :</span>
-            <span id="download-count">0</span>
-        </div>
-
         <div class="footer">
             <p>&copy; 2026 SOSIALY - RANDY MIRADO</p>
         </div>
@@ -205,7 +214,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const btn = document.getElementById('downloadBtn');
-            const counterEl = document.getElementById('download-count');
             
             // Animation d'entrée
             btn.style.opacity = '0';
@@ -215,31 +223,6 @@
                 btn.style.opacity = '1';
                 btn.style.transform = 'translateY(0)';
             }, 300);
-
-            // CONFIGURATION COUNTAPI
-            const namespace = 'sosialy-rd1404-2026';
-            const key = 'downloads-v2'; // Nouveau nom pour repartir à 0
-
-            // 1️⃣ Charger la valeur actuelle
-            fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
-                .then(res => res.json())
-                .then(data => {
-                    counterEl.textContent = data.value;
-                })
-                .catch(() => {
-                    // Si erreur, on laisse 0
-                    console.log("Erreur compteur, affichage par défaut 0");
-                });
-
-            // 2️⃣ Ajouter +1 à chaque clic
-            btn.addEventListener('click', function() {
-                fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        counterEl.textContent = data.value;
-                    })
-                    .catch(() => {});
-            });
         });
     </script>
 </body>
