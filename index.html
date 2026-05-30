@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOSIALY - Télécharger l'application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .instruction {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 40px;            line-height: 1.6;
+        }
+
+        .download-section {
+            margin: 40px 0;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .arrows {
+            display: inline-block;
+            animation: bounce 1s infinite;
+            margin: 0 15px;
+            font-weight: bold;
+            font-size: 1.8rem;
+        }
+
+        .arrows.left {
+            animation-delay: 0s;
+        }
+
+        .arrows.right {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes bounce {            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(-10px);
+            }
+        }
+
+        .app-image {
+            margin-top: 40px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .download-btn {
+                font-size: 1.2rem;
+                padding: 15px 30px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SOSIALY</h2>
+        
+        <p class="instruction">
+            Tsindrio ny > Télécharger < hahazoanao ny application SOSIALY.
+        </p>
+
+        <div class="download-section">
+            <a href="https://github.com/RD1404/Sosialy/releases/download/V1.0.0/Sosialy.apk" 
+               class="download-btn" 
+               download>                <span class="arrows left">>></span>
+                Télécharger
+                <span class="arrows right"><<</span>
+            </a>
+        </div>
+
+        <img src="votre-image.jpg" 
+             alt="SOSIALY Application" 
+             class="app-image">
+
+        <div class="footer">
+            <p>&copy; 2026 SOSIALY - RANDY MIRADO</p>
+        </div>
+    </div>
+
+    <script>
+        // Animation supplémentaire au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.querySelector('.download-btn');
+            btn.style.opacity = '0';
+            btn.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                btn.style.transition = 'all 0.6s ease';
+                btn.style.opacity = '1';
+                btn.style.transform = 'translateY(0)';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
