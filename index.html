@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOSIALY - Télécharger l'application</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -32,30 +28,26 @@
         }
 
         h1 {
+            font-family: 'Dom Casual', 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive;
             font-size: 3.5rem;
-            color: #2c3e50;
+            color: #4B0082;
             margin-bottom: 20px;
-            font-weight: 800;
+            font-weight: 900; /* ✅ TITRE EN GRAS */
             text-transform: uppercase;
             letter-spacing: 2px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(75, 0, 130, 0.15);
         }
 
         .instruction {
             font-size: 1.2rem;
             color: #555;
-            margin-bottom: 40px;            line-height: 1.6;
+            margin-bottom: 40px;
+            line-height: 1.6;
         }
 
-        .download-section {
-            margin: 40px 0;
-        }
+        .download-section { margin: 40px 0; }
 
-        .download-btn {
-            display: inline-flex;
+        .download-btn {            display: inline-flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -67,17 +59,11 @@
             font-weight: bold;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
             transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
         }
 
         .download-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
-        }
-
-        .download-btn:active {
-            transform: translateY(-1px);
         }
 
         .arrows {
@@ -88,20 +74,9 @@
             font-size: 1.8rem;
         }
 
-        .arrows.left {
-            animation-delay: 0s;
-        }
-
-        .arrows.right {
-            animation-delay: 0.5s;
-        }
-
-        @keyframes bounce {            0%, 100% {
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(-10px);
-            }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-10px); }
         }
 
         .app-image {
@@ -112,48 +87,65 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
+        .download-counter {
+            margin-top: 35px;
+            padding: 15px 25px;
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 12px;
+            display: inline-block;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .download-counter span:first-child {            font-size: 0.95rem;
+            color: #666;
+        }
+
+        #download-count {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4B0082;
+            margin-left: 8px;
+        }
+
         .footer {
             margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(0,0,0,0.08);
             color: #888;
             font-size: 0.9rem;
         }
 
         @media (max-width: 600px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .download-btn {
-                font-size: 1.2rem;
-                padding: 15px 30px;
-            }
-            
-            .container {
-                padding: 30px 20px;
-            }
+            h1 { font-size: 2.5rem; }
+            .download-btn { font-size: 1.2rem; padding: 15px 30px; }
+            .container { padding: 30px 20px; }
+            #download-count { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>SOSIALY</h2>
+        <h1>SOSIALY</h1>
         
         <p class="instruction">
-            Tsindrio ny > Télécharger < hahazoanao ny application SOSIALY.
+            Tsindrio ny >> Télécharger << hahazoanao ny application SOSIALY.
         </p>
 
         <div class="download-section">
             <a href="https://github.com/RD1404/Sosialy/releases/download/V1.0.0/Sosialy.apk" 
                class="download-btn" 
-               download>                <span class="arrows left">>></span>
+               download>
+                <span class="arrows left">>></span>
                 Télécharger
                 <span class="arrows right"><<</span>
             </a>
         </div>
 
-        <img src="icon-512.png" 
-             alt="SOSIALY Application" 
-             class="app-image">
+        <img src="icon-512.png" alt="SOSIALY Application" class="app-image">
+
+        <div class="download-counter">
+            <span>Téléchargements :</span>
+            <span id="download-count">...</span>        </div>
 
         <div class="footer">
             <p>&copy; 2026 SOSIALY - RANDY MIRADO</p>
@@ -161,7 +153,6 @@
     </div>
 
     <script>
-        // Animation supplémentaire au chargement
         document.addEventListener('DOMContentLoaded', function() {
             const btn = document.querySelector('.download-btn');
             btn.style.opacity = '0';
@@ -172,39 +163,24 @@
                 btn.style.opacity = '1';
                 btn.style.transform = 'translateY(0)';
             }, 300);
+
+            fetch('https://api.github.com/repos/RD1404/Sosialy/releases/tags/V1.0.0')
+                .then(res => res.json())
+                .then(data => {
+                    const asset = data.assets.find(a => a.name === 'Sosialy.apk');
+                    document.getElementById('download-count').textContent = asset ? asset.download_count.toLocaleString() : '0';
+                })
+                .catch(() => { document.getElementById('download-count').textContent = 'N/A'; });
+
+            setInterval(() => {
+                fetch('https://api.github.com/repos/RD1404/Sosialy/releases/tags/V1.0.0')
+                    .then(res => res.json())
+                    .then(data => {
+                        const asset = data.assets.find(a => a.name === 'Sosialy.apk');
+                        if (asset) document.getElementById('download-count').textContent = asset.download_count.toLocaleString();
+                    });
+            }, 60000);
         });
     </script>
-<!-- Compteur de téléchargements -->
-<div class="download-counter" style="margin-top: 25px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px; display: inline-block;">
-    <span style="font-size: 0.9rem; color: #888;">📥 Téléchargements :</span>
-    <span id="download-count" style="font-size: 1.4rem; font-weight: bold; color: #667eea; margin-left: 8px;">...</span>
-</div>
-
-<script>
-    // Récupère le vrai compteur GitHub
-    fetch('https://api.github.com/repos/RD1404/Sosialy/releases/tags/V1.0.0')
-        .then(res => res.json())
-        .then(data => {
-            const asset = data.assets.find(a => a.name === 'Sosialy.apk');
-            if (asset) {
-                document.getElementById('download-count').textContent = asset.download_count.toLocaleString();
-            } else {
-                document.getElementById('download-count').textContent = '0';
-            }
-        })
-        .catch(() => {
-            document.getElementById('download-count').textContent = 'N/A';
-        });
-
-    // Actualise toutes les 5 minutes pour rester à jour
-    setInterval(() => {
-        fetch('https://api.github.com/repos/RD1404/Sosialy/releases/tags/V1.0.0')
-            .then(res => res.json())
-            .then(data => {
-                const asset = data.assets.find(a => a.name === 'Sosialy.apk');
-                if (asset) document.getElementById('download-count').textContent = asset.download_count.toLocaleString();
-            });
-    }, 60000);
-</script>
 </body>
 </html>
