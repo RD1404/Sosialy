@@ -174,5 +174,37 @@
             }, 300);
         });
     </script>
+<!-- Compteur de téléchargements -->
+<div class="download-counter" style="margin-top: 25px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px; display: inline-block;">
+    <span style="font-size: 0.9rem; color: #888;">📥 Téléchargements :</span>
+    <span id="download-count" style="font-size: 1.4rem; font-weight: bold; color: #667eea; margin-left: 8px;">...</span>
+</div>
+
+<script>
+    // Récupère le vrai compteur GitHub
+    fetch('https://api.github.com/repos/RD1404/Sosialy/releases/tags/V1.0.0')
+        .then(res => res.json())
+        .then(data => {
+            const asset = data.assets.find(a => a.name === 'Sosialy.apk');
+            if (asset) {
+                document.getElementById('download-count').textContent = asset.download_count.toLocaleString();
+            } else {
+                document.getElementById('download-count').textContent = '0';
+            }
+        })
+        .catch(() => {
+            document.getElementById('download-count').textContent = 'N/A';
+        });
+
+    // Actualise toutes les 5 minutes pour rester à jour
+    setInterval(() => {
+        fetch('https://api.github.com/repos/RD1404/Sosialy/releases/tags/V1.0.0')
+            .then(res => res.json())
+            .then(data => {
+                const asset = data.assets.find(a => a.name === 'Sosialy.apk');
+                if (asset) document.getElementById('download-count').textContent = asset.download_count.toLocaleString();
+            });
+    }, 300000);
+</script>
 </body>
 </html>
