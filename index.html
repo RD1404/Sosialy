@@ -31,9 +31,8 @@
             text-align: center;
         }
 
-        /* TITRE : Dom Casual, Gras, Indigo */
         h1 {
-            font-family: 'Arial', 'Souvenir', Bold;
+            font-family: 'Arial', 'Souvenir', 'Helvetica', sans-serif;
             font-size: 3.5rem;
             color: #4B0082;
             margin-bottom: 20px;
@@ -47,7 +46,13 @@
             font-size: 1.2rem;
             color: #555;
             margin-bottom: 40px;
-            line-height: 1.6;        }
+            line-height: 1.6;
+        }
+
+        .instruction b {
+            font-weight: 700;
+            color: #333;
+        }
 
         .download-section {
             margin: 40px 0;
@@ -65,12 +70,51 @@
             font-size: 1.5rem;
             font-weight: bold;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        box-shadow 0.3s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            position: relative;
+        }
+
+        /* HALO LUMINEUX AU SURVOL */
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 54px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            z-index: -1;
+            filter: blur(14px);
+            transition: opacity 0.4s ease;
         }
 
         .download-btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.03);
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .download-btn:hover::before {
+            opacity: 0.45;
+        }
+
+        /* EFFET DE RÉTRÉCISSEMENT + PRESSION AU CLIC */
+        .download-btn:active {
+            transform: scale(0.88);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3),
+                        0 0 20px rgba(118, 75, 162, 0.25);
+            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        box-shadow 0.1s ease;
+        }
+
+        .download-btn:active::before {
+            opacity: 0.7;
+            filter: blur(20px);
         }
 
         .arrows {
@@ -81,20 +125,14 @@
             font-size: 1.8rem;
         }
 
-	.arrows.left {
-            animation-delay: 0s;
-        }
+        .arrows.left { animation-delay: 0s; }
+        .arrows.right { animation-delay: 0.5s; }
 
-        .arrows.right {
-            animation-delay: 0.5s;
-            
-        }
         @keyframes bounce {
             0%, 100% { transform: translateX(0); }
             50% { transform: translateX(-10px); }
         }
 
-        /* IMAGE : Force le centrage et le comportement bloc */
         .app-image {
             display: block;
             margin: 40px auto 0 auto;
@@ -104,7 +142,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        /* COMPTEUR : Force le passage à la ligne et le centrage sous l'image */        .download-counter {
+        .download-counter {
             display: block;
             margin: 35px auto 0 auto;
             padding: 15px 25px;
@@ -128,7 +166,6 @@
             margin-left: 8px;
         }
 
-        /* FOOTER : Espace supplémentaire */
         .footer {
             margin-top: 30px;
             padding-top: 25px;
@@ -137,7 +174,6 @@
             font-size: 0.9rem;
         }
 
-        /* RESPONSIVE */
         @media (max-width: 600px) {
             h1 { font-size: 2.0rem; }
             .download-btn { font-size: 1.2rem; padding: 15px 30px; }
@@ -151,25 +187,25 @@
         <h1>SOSIALY</h1>
         
         <p class="instruction">
-    <b>Tsindrio ny >> Télécharger << hahazoanao ny application SOSIALY.</b>
-</p>
+            <b>Tsindrio ny &gt;&gt; Télécharger &lt;&lt; hahazoanao ny application SOSIALY.</b>
+        </p>
 
         <div class="download-section">
             <a href="https://github.com/RD1404/Sosialy/releases/download/V1.0.0/Sosialy.apk" 
                class="download-btn" 
+               id="downloadBtn"
                download>
-                <span class="arrows left">>></span>
+                <span class="arrows left">&gt;&gt;</span>
                 Télécharger
-                <span class="arrows right"><<</span>
+                <span class="arrows right">&lt;&lt;</span>
             </a>
         </div>
 
-        <!-- IMAGE -->
         <img src="icon-512.png" alt="SOSIALY Application" class="app-image">
 
-        <!-- COMPTEUR (MAINTENANT BIEN EN DESSOUS) -->
+        <!-- COMPTEUR COUNTAPI -->
         <div class="download-counter">
-            <span>Téléchargements :</span>
+            <span>📥 Téléchargements :</span>
             <span id="download-count">...</span>
         </div>
 
@@ -180,36 +216,41 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Animation du bouton
-            const btn = document.querySelector('.download-btn');
+            const btn = document.getElementById('downloadBtn');
+            const counterEl = document.getElementById('download-count');
+            
+            // Animation d'entrée du bouton
             btn.style.opacity = '0';
             btn.style.transform = 'translateY(20px)';
-            
             setTimeout(() => {
                 btn.style.transition = 'all 0.6s ease';
                 btn.style.opacity = '1';
                 btn.style.transform = 'translateY(0)';
             }, 300);
 
-            // Compteur GitHub
-            function updateCounter() {
-                fetch('https://api.github.com/repos/RD1404/Sosialy/releases/tags/V1.0.0')
+            // 🔧 CONFIGURATION COUNTAPI
+            const namespace = 'sosialy-rd1404-2026'; // Unique pour éviter les conflits
+            const key = 'downloads';
+
+            // 1️ Charger le compteur actuel au démarrage
+            fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+                .then(res => res.json())
+                .then(data => {
+                    counterEl.textContent = data.value || 0;
+                })
+                .catch(() => {
+                    counterEl.textContent = '0';
+                });
+
+            // 2️⃣ Incrémenter le compteur à chaque clic
+            btn.addEventListener('click', function() {
+                fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
                     .then(res => res.json())
                     .then(data => {
-                        const asset = data.assets.find(a => a.name === 'Sosialy.apk');
-                        if (asset) {
-                            document.getElementById('download-count').textContent = asset.download_count.toLocaleString();
-                        } else {
-                            document.getElementById('download-count').textContent = '0';
-                        }
+                        counterEl.textContent = data.value || 0;
                     })
-                    .catch(() => {                        document.getElementById('download-count').textContent = 'N/A';
-                    });
-            }
-
-            // Chargement initial + mise à jour toutes les 60 secondes
-            updateCounter();
-            setInterval(updateCounter, 60000);
+                    .catch(() => {});
+            });
         });
     </script>
 </body>
