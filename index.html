@@ -81,6 +81,14 @@
             font-size: 1.8rem;
         }
 
+	.arrows.left {
+            animation-delay: 0s;
+        }
+
+        .arrows.right {
+            animation-delay: 0.5s;
+            
+        }
         @keyframes bounce {
             0%, 100% { transform: translateX(0); }
             50% { transform: translateX(-10px); }
@@ -131,10 +139,10 @@
 
         /* RESPONSIVE */
         @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
+            h1 { font-size: 2.0rem; }
             .download-btn { font-size: 1.2rem; padding: 15px 30px; }
             .container { padding: 30px 20px; }
-            #download-count { font-size: 1.3rem; }
+            #download-count { font-size: 1.0rem; }
         }
     </style>
 </head>
@@ -143,8 +151,9 @@
         <h1>SOSIALY</h1>
         
         <p class="instruction">
-            Tsindrio ny >> Télécharger << hahazoanao ny application SOSIALY.
-        </p>
+    <b>Tsindrio ny >> Télécharger << hahazoanao ny application SOSIALY.</b>
+</p>
+
         <div class="download-section">
             <a href="https://github.com/RD1404/Sosialy/releases/download/V1.0.0/Sosialy.apk" 
                class="download-btn" 
